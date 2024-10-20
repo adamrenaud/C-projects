@@ -1,0 +1,119 @@
+/**********************************************
+* CMP_SC 1050
+* FS 2024
+* Lab 9
+* By Adam Renaud (ajrzpv)
+* October 18, 2024
+**********************************************/
+
+#include <stdio.h>
+
+//coordinates of the treasure
+#define Xtreasurecoordinate 3
+#define Ytreasurecoordinate 3
+
+#define SIZE 5
+
+//function prototypes
+void initializeMap(int map[SIZE][SIZE]);
+void displayMap(int map[SIZE][SIZE], int x, int y);
+void move(int *x, int *y, char direction);
+int checkTreasure(int x, int y);
+void printP (int x, int y);
+
+int main()
+{
+    int map[SIZE][SIZE];
+    int currentXcoordinate=0;
+    int currentYcoordinate=0;
+    char direction;
+
+
+    initializeMap(map);
+
+    printf ("Welcome to Captain Codebeard's Treasure Hunt!\n");
+
+    //while the treaure is not on the user's current position
+    while (!checkTreasure(currentXcoordinate, currentYcoordinate))
+    {
+        displayMap(map, currentXcoordinate, currentYcoordinate);
+        printf("\nYour current position is (%d, %d)\n", currentXcoordinate, currentYcoordinate);
+        printf("Enter your direction (U/D/L/R): ");
+        scanf(" %c", &direction);
+
+        move(&currentXcoordinate, &currentYcoordinate, direction);
+    }
+
+
+}
+
+//for loop that makes the entire array a bunch of 0's
+void initializeMap(int map[SIZE][SIZE])
+{
+   for (int i=0; i<SIZE; i++)
+    {
+        for (int j=0; j<SIZE; j++)
+        {
+            map[i][j]=0;
+        }
+    } 
+}
+
+//for loop that prints the map and P for position
+void displayMap(int map[SIZE][SIZE], int x, int y)
+{
+    for (int i=0; i<SIZE; i++)
+    {
+        for (int j=0; j<SIZE; j++)
+        {
+            if (i==x && j==y)
+            {
+                printf("[P] ");
+            } else {
+            printf ("[%d] ", map[i][j]);
+            }
+        }
+
+        printf ("\n");
+    }
+}
+
+//if the current coordinates are the treasure, returns 1
+int checkTreasure(int x, int y)
+{
+    if (x==Xtreasurecoordinate && y==Ytreasurecoordinate){
+        printf ("\nYou found the treasure!\n");
+        return 1;
+    } else{
+        return 0;
+    }
+}
+
+//switch statment for each direction to move through the rows and columns while staying in bounds
+void move(int *x, int *y, char direction)
+{
+    switch(direction)
+    {
+        case 'U':
+            if(*x > 0){
+                (*x)--;}
+                break;
+        case 'D':
+            if (*x < SIZE-1){
+                (*x)++;}
+                break;
+        case 'R':
+            if (*y < SIZE-1){
+                (*y)++;}
+                break;
+        case 'L':
+            if (*y > 0){
+                (*y)--;}
+                break;
+        default:
+            printf("Invalid direction.");
+            break;
+    }
+}
+
+
