@@ -1,0 +1,109 @@
+/**********************************************
+* CMP_SC 1050
+* FS 2024
+* Lab 8
+* By Adam Renaud (ajrzpv)
+* October 11, 2024
+**********************************************/
+
+#include <stdio.h>
+
+//symbolic constants
+#define ROWS 5 
+#define COLS 5
+
+//func prototypes
+void displayGrid(char grid[ROWS][COLS], int reveal);
+int checkHit(char grid[ROWS][COLS], int row, int col);
+void updateGrid(char grid[ROWS][COLS], int row, int col, int hit);
+int allShipsSunk(char grid[ROWS][COLS]);
+
+int main(){
+
+//initialized the grid
+char grid[ROWS][COLS] = 
+
+{ 
+    {'S', '~', '~', 'S', '~'},
+    {'S', '~', '~', 'S', '~'},
+    {'~', '~', '~', '~', '~'},
+    {'~', 'S', 'S', 'S', '~'},
+    {'~', '~', '~', '~', '~'}
+};
+
+//local variables
+int guess1, guess2, hit=0;
+
+printf ("\nWelcome to Sink the Alien Ship!");
+printf ("\nInitial grid:\n");
+displayGrid(grid, 0);
+
+//repeats while function isnt true
+while (!allShipsSunk(grid)){
+    printf("\nEnter your guess (row and column): ");
+    scanf ("%d %d", &guess1, &guess2);
+
+    hit = checkHit(grid, guess1, guess2); //set variable equal to function
+
+    //grid is updated and redisplayed
+    updateGrid(grid, guess1, guess2, hit);
+    displayGrid(grid, 0);
+
+    //if there is a hit it prints hit if not it prints miss
+    if(hit){
+        printf("Hit!\n");
+    } else {
+        printf("Miss!\n");
+    }
+
+
+}
+    //once out of while-loop the game ends
+    printf("\nCongrats! You have sunk all ships!\n");
+    return 0;
+}
+
+//iterates through all rows and columns and replaces "S" with water
+void displayGrid(char grid[ROWS][COLS], int reveal){
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            if(grid[i][j]=='S'){
+                printf("~ ");
+            } else {
+            printf("%c ", grid[i][j]);
+            }
+
+        }
+        printf("\n");
+    }
+}
+
+//if there is an "S" where the player guessed, this function comes back as true
+int checkHit(char grid[ROWS][COLS], int row, int col){
+  if (grid[row][col]=='S'){
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+//grid updates based on hit or miss
+void updateGrid(char grid[ROWS][COLS], int row, int col, int hit){
+   if (hit) {
+        grid[row][col] = 'X'; //hit
+    } else {
+        grid[row][col] = 'O'; //miss
+    }
+}
+
+//iterates through all rows and columns to check if any ships are remaining
+int allShipsSunk(char grid[ROWS][COLS]){
+    for (int i=0; i<ROWS; i++){
+        for (int j=0; j<COLS; j++){
+            if (grid[i][j]=='S'){
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
